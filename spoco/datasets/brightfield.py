@@ -49,7 +49,6 @@ class BrightfieldDataset:
 
         self.phase = phase
         self.images, self.paths = self._load_files(os.path.join(root_dir, phase))
-        print(self.images)
         assert len(self.images) > 0
 
         self.train_label_transform = transforms.Compose(

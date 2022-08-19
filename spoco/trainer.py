@@ -165,10 +165,12 @@ class SpocoTrainer(AbstractTrainer):
             # forward pass through SpocoUNet
             emb_f, emb_g = self.model(im_f, im_g)
             emb_g = emb_g.detach()
+            #print("fwd pass done")
 
             # compute the loss
             loss = self.loss((emb_f, emb_g), target)
             train_losses.update(loss.item(), im_f.size(0))
+            #print("loss done")
 
             # compute gradients and update parameters
             self.optimizer.zero_grad()

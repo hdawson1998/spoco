@@ -221,12 +221,18 @@ def expand_as_one_hot(input, C, ignore_index=None):
         output torch.Tensor of size (NxCxSPATIAL)
     """
     assert input.dim() > 2
+    print("INPUT SIZE")
+    print(input.size()) #[1, 512, 672])
 
     # expand the input tensor to Nx1xSPATIAL before scattering
     input = input.unsqueeze(1)
+    print("INPUT SIZE") 
+    print(input.size())#([1, 1, 512, 672])
     # create output tensor shape (NxCxSPATIAL)
     shape = list(input.size())
     shape[1] = C
+    print("INPUT SIZE")
+    print(input.size())#([1, 1, 512, 672])
 
     if ignore_index is not None:
         # create ignore_index mask for the result
@@ -241,6 +247,13 @@ def expand_as_one_hot(input, C, ignore_index=None):
         return result
     else:
         # scatter to get the one-hot tensor
+        # print self shape to see if
+        print("index SIZE") 
+        print(input.size())
+        #print("src SIZE") - should just be one?
+        #print(1.size())
+        print("self SIZE") 
+        print(torch.zeros(shape).to(input.device).size())
         return torch.zeros(shape).to(input.device).scatter_(1, input, 1)
 
 
@@ -272,14 +285,16 @@ def compute_cluster_means(embeddings, target, n_instances):
     shape = list(target.size())
     shape[1] = embedding_dim
     target = target.expand(shape)
+    #print("should be (C x (printed below after line) x spatial")
+    #print(target.size())
 
     # expand input_: ExSPATIAL -> 1xExSPATIAL
     embeddings = embeddings.unsqueeze(0)
 
     # sum embeddings in each instance (multiply first via broadcasting); embeddings_per_instance shape CxExSPATIAL
-    print("---------------------------------")
-    print(embeddings.size())
-    print(target.size())
+    #print("---------------------------------")
+    #print(embeddings.size())
+    #print(target.size())
     embeddings_per_instance = embeddings * target
     # num's shape: CxEx1(SPATIAL)
     num = torch.sum(embeddings_per_instance, dim=dim_arg)
@@ -348,8 +363,8 @@ class AbstractContrastiveLoss(nn.Module):
         if ignore_zero_label:
             # zero out distances corresponding to 0-label cluster, so that it does not contribute to the loss
             dist_mask = torch.ones_like(dist_to_mean)
-            print(dist_mask)
-            print(target)
+            #print(dist_mask)
+            #print(target)
             dist_mask[target == 0] = 0
             dist_to_mean = dist_to_mean * dist_mask
             # decrease number of instances
@@ -505,6 +520,11 @@ class AbstractContrastiveLoss(nn.Module):
                 ignore_zero_label = True
 
             instance_ids, instance_counts = torch.unique(single_target, return_counts=True)
+
+            print("instance IDS")
+            print(instance_ids)
+            print(instance_ids.size())
+            print(instance_ids.size(0))
 
             # compare spatial dimensions
             assert single_input.size()[1:] == single_target.size()
