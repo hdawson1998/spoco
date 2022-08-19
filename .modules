@@ -1,0 +1,13 @@
+#uncertain if correct
+
+  - python
+  - pytorch
+  - torchvision
+  - tensorboard
+  - h5py
+  - scipy
+  - scikit-image
+  - scikit-learn
+  - pyyaml
+  - hdbscan
+  - pytest

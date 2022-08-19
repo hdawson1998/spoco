@@ -10,12 +10,13 @@ import torch.multiprocessing as mp
 from spoco.trainer import SpocoTrainer, UNetTrainer
 from spoco.utils import SUPPORTED_DATASETS
 
+#comment to test transfer
 parser = argparse.ArgumentParser(description='SPOCO train')
 parser.add_argument('--manual-seed', type=int, default=None, help="RNG seed for deterministic training")
 
 # dataset config
-parser.add_argument('--ds-name', type=str, default='cvppp', choices=SUPPORTED_DATASETS,
-                    help=f'Name of the dataset from: {SUPPORTED_DATASETS}')
+parser.add_argument('--ds-name', type=str, default='cvppp', choices=SUPPORTED_DATASETS)
+                    #help=f'Name of the dataset from: {SUPPORTED_DATASETS}')
 parser.add_argument('--ds-path', type=str, required=True, help='Path to the dataset root directory')
 parser.add_argument('--things-class', type=str, help='Cityscapes instance class. If None, train with all things classes',
                     default=None)
@@ -115,7 +116,7 @@ def main():
 
     seed = args.manual_seed
     if seed is not None:
-        print(f'Seed the RNG for all devices with {seed}')
+        #print(f'Seed the RNG for all devices with {seed}')
         random.seed(seed)
         torch.manual_seed(seed)
         # see https://pytorch.org/docs/stable/notes/randomness.html

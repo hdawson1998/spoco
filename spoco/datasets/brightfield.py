@@ -21,8 +21,8 @@ EXTENDED_TRANSFORM = transforms.Compose(
         ImgNormalize()
     ]
 )
-
-DOWNSIZE = size = (512, 672)
+DOWNSIZE = size = (512 , 672)
+#DOWNSIZE = size = (672 , 512)
 
 SPOCO_TEST = transforms.Compose(
     [
@@ -49,6 +49,7 @@ class BrightfieldDataset:
 
         self.phase = phase
         self.images, self.paths = self._load_files(os.path.join(root_dir, phase))
+        print(self.images)
         assert len(self.images) > 0
 
         self.train_label_transform = transforms.Compose(
@@ -116,7 +117,7 @@ class BrightfieldDataset:
     def _load_files(root_dir):
         # we only load raw or label images
         files_data = []
-        paths = list(glob.glob(os.path.join(root_dir, '*.tif')))
+        paths = list(glob.glob(os.path.join(root_dir, '*.tiff')))
         for file in paths:
             img = imageio.imread(file)
             img = np.array(img)

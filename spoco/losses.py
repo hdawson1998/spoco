@@ -277,6 +277,9 @@ def compute_cluster_means(embeddings, target, n_instances):
     embeddings = embeddings.unsqueeze(0)
 
     # sum embeddings in each instance (multiply first via broadcasting); embeddings_per_instance shape CxExSPATIAL
+    print("---------------------------------")
+    print(embeddings.size())
+    print(target.size())
     embeddings_per_instance = embeddings * target
     # num's shape: CxEx1(SPATIAL)
     num = torch.sum(embeddings_per_instance, dim=dim_arg)
@@ -345,6 +348,8 @@ class AbstractContrastiveLoss(nn.Module):
         if ignore_zero_label:
             # zero out distances corresponding to 0-label cluster, so that it does not contribute to the loss
             dist_mask = torch.ones_like(dist_to_mean)
+            print(dist_mask)
+            print(target)
             dist_mask[target == 0] = 0
             dist_to_mean = dist_to_mean * dist_mask
             # decrease number of instances
